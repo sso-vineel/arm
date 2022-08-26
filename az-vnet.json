@@ -1,33 +1,38 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "vnet_name": {
+            "type": "string",
+            "defaultValue": "vnet-dummy"
+        },
+        "env_tag_value": {
+            "type": "string",
+            "defaultValue": "tag-dummy"
+        },
+        "vnet_addr_pfx": {
+            "type": "array",
+            "defaultValue": [
+                "1.0.0.0/8"
+            ]
+        }
+    },
     "functions": [],
     "variables": {},
     "resources": [
         {
-            "name": "vnet-kfctta-mgmt-eus-001",
+            "name": "[parameters('vnet_name')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "Environment" : "Management",
+                "Environment" : "[parameters('env_tag_value')]",
                 "Automation" : "ARM"
             },
             "properties": {
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "10.10.100.0/24"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "sn-frontend",
-                        "properties": {
-                            "addressPrefix": "10.10.100.0/26"
-                        }
-                    }
-                ]
+                    "addressPrefixes": "[parameters('vnet_addr_pfx')]"
+                }
             }
         }
     ],
